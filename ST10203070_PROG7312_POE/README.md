@@ -44,3 +44,6 @@ Using the Application
 Troubleshooting
 	If the application does not start, ensure you have the correct version of Visual Studio and .NET Framework installed.
 	If UI elements do not display correctly, try resizing the window or adjusting your display settings.
+
+GitHub Repository:
+https://github.com/ST10203070/ST10203070_PROG7312_POE
