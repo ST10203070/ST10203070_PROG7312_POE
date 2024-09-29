@@ -163,7 +163,15 @@ namespace ST10203070_PROG7312_POE
         private void btnLocalEvents_Click(object sender, EventArgs e)
         {
             PlayClickSound();
-            MessageBox.Show("This feature is not yet implemented.", "Coming Soon");
+
+            // Check if dark mode is active
+            bool isDarkMode = chkThemeToggle.Checked;
+
+            // Pass the dark mode state to a new instance of the LocalEventsForm
+            LocalEventsForm localEventsForm = new LocalEventsForm(isDarkMode, isSoundOn);
+
+            // Show the new instance of LocalEventsForm as a dialog
+            localEventsForm.ShowDialog();
         }
 
         /// <summary>
