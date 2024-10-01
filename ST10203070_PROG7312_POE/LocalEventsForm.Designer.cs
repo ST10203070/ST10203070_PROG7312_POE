@@ -152,7 +152,7 @@ namespace ST10203070_PROG7312_POE
             // 
             // btnSearchEvents
             // 
-            this.btnSearchEvents.Anchor = AnchorStyles.Top;
+            this.btnSearchEvents.Anchor = AnchorStyles.Top | AnchorStyles.Left;
             this.btnSearchEvents.Location = new Point(150, 220);
             this.btnSearchEvents.Name = "btnSearchEvents";
             this.btnSearchEvents.Size = new Size(200, 50);
