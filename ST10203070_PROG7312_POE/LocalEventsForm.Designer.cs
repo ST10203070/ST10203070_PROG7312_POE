@@ -94,7 +94,7 @@ namespace ST10203070_PROG7312_POE
             this.txtSearchEvents.Name = "txtSearchEvents";
             this.txtSearchEvents.Size = new System.Drawing.Size(507, 38);
             this.txtSearchEvents.TabIndex = 1;
-            this.toolTip.SetToolTip(this.txtSearchEvents, "Enter search term for events or news.");
+            this.toolTip.SetToolTip(this.txtSearchEvents, "Enter search term for events or news. Recommendations are made based on search history.");
             // 
             // lblCategory
             // 

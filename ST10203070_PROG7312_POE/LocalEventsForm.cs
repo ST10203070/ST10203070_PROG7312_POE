@@ -270,7 +270,7 @@ namespace ST10203070_PROG7312_POE
             if (!string.IsNullOrEmpty(searchTerm))
             {
                 searchHistory.Enqueue(searchTerm);
-                if (searchHistory.Count > 5) // Limit history size
+                if (searchHistory.Count > 12) // Limit history size
                 {
                     searchHistory.Dequeue();
                 }
