@@ -174,7 +174,6 @@ namespace ST10203070_PROG7312_POE
             cmbCategory.SelectedIndex = 0; // Set default selection
         }
 
-
         /// <summary>
         /// Adds event to the SortedDictionary as a priority queue (by date)
         /// </summary>
@@ -246,21 +245,20 @@ namespace ST10203070_PROG7312_POE
         private void AppendEventToRichTextBox(Event ev)
         {
             rtbEvents.SelectionFont = new Font("Courier New", 12F, FontStyle.Bold);
-            rtbEvents.SelectionColor = Color.Blue;
+            rtbEvents.SelectionColor = Color.CadetBlue;
             rtbEvents.AppendText($"{ev.Date.ToShortDateString()}\n");
 
             rtbEvents.SelectionFont = new Font("Courier New", 10F, FontStyle.Bold);
-            rtbEvents.SelectionColor = isDarkMode ? Color.White : Color.Black; // White for dark mode, black for light mode
+            rtbEvents.SelectionColor = isDarkMode ? Color.White : Color.Black; 
             rtbEvents.AppendText($"{ev.Title} ({ev.Category})\n");
 
-            // Adjust description and line color based on theme
             rtbEvents.SelectionFont = new Font("Courier New", 10F, FontStyle.Italic);
-            rtbEvents.SelectionColor = isDarkMode ? Color.White : Color.Gray; // White for dark mode, gray for light mode
+            rtbEvents.SelectionColor = isDarkMode ? Color.White : Color.Gray; 
             rtbEvents.AppendText($"{ev.Description}\n");
 
             rtbEvents.SelectionFont = new Font("Courier New", 10F, FontStyle.Regular);
-            rtbEvents.SelectionColor = isDarkMode ? Color.White : Color.Black; // White for dark mode, black for light mode
-            rtbEvents.AppendText("-------------------------------\n");
+            rtbEvents.SelectionColor = isDarkMode ? Color.White : Color.Black; 
+            rtbEvents.AppendText("------------------------------\n");
         }
 
         /// <summary>
@@ -312,7 +310,7 @@ namespace ST10203070_PROG7312_POE
 
             if (recommendations.Count > 0)
             {
-                rtbEvents.AppendText("\n---- Recommended Events ----\n");
+                rtbEvents.AppendText("\n\n----- Recommended Events -----\n");
                 rtbEvents.SelectionFont = new Font("Courier New", 12F, FontStyle.Bold);
                 rtbEvents.SelectionColor = Color.DarkGreen;
 
@@ -323,7 +321,7 @@ namespace ST10203070_PROG7312_POE
             }
             else
             {
-                rtbEvents.AppendText("\nNo recommendations found.\n");
+                rtbEvents.AppendText("\n\nNo recommendations found.\n");
             }
         }
 

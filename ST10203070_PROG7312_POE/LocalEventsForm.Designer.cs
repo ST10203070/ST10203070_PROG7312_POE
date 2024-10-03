@@ -13,7 +13,6 @@ namespace ST10203070_PROG7312_POE
         private System.Windows.Forms.ProgressBar progressBarCompletion;
         private System.Windows.Forms.ToolTip progressBarToolTip;
         private Label lblProgressMessage;
-
         private RichTextBox rtbEvents;
 
 
@@ -171,14 +170,6 @@ namespace ST10203070_PROG7312_POE
             this.btnBackToMainMenu.UseVisualStyleBackColor = true;
             this.btnBackToMainMenu.Click += new System.EventHandler(this.btnBackToMainMenu_Click);
             // 
-            // lstEvents
-            // 
-/*            this.lstEvents.ItemHeight = 31;
-            this.lstEvents.Location = new System.Drawing.Point(0, 0);
-            this.lstEvents.Name = "lstEvents";
-            this.lstEvents.Size = new System.Drawing.Size(120, 66);
-            this.lstEvents.TabIndex = 12;*/
-            // 
             // lblProgressMessage
             // 
             this.lblProgressMessage.AutoSize = true;
@@ -215,7 +206,6 @@ namespace ST10203070_PROG7312_POE
             this.Controls.Add(this.dtpTo);
             this.Controls.Add(this.dtpFrom);
             this.Controls.Add(this.lblDateRange);
-            this.Controls.Add(this.lstEvents);
             this.Controls.Add(this.btnBackToMainMenu);
             this.Controls.Add(this.btnSearchEvents);
             this.Controls.Add(this.lblLocation);
@@ -243,7 +233,6 @@ namespace ST10203070_PROG7312_POE
         private System.Windows.Forms.DateTimePicker dtpTo;
         private System.Windows.Forms.Button btnSearchEvents;
         private System.Windows.Forms.Button btnBackToMainMenu;
-        private System.Windows.Forms.ListBox lstEvents;
         private System.Windows.Forms.ToolTip toolTip;
     }
 }
