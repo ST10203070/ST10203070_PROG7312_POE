@@ -14,7 +14,9 @@ namespace ST10203070_PROG7312_POE
     public partial class LocalEventsForm : Form
     {
         /// <summary>
-        /// Sorted dictionary for events
+        /// Sorted dictionary that organizes events by date. 
+        /// Each date is associated with a queue of events, 
+        /// ensuring that events on the same date are stored in the order they are added.
         /// </summary>
         private SortedDictionary<DateTime, Queue<Event>> eventsByDate;
 
@@ -27,6 +29,12 @@ namespace ST10203070_PROG7312_POE
         /// Queue to store search history for recommendation feature
         /// </summary>
         private Queue<string> searchHistory = new Queue<string>();
+
+        /// <summary>
+        /// A HashSet used to track events that have already been displayed in the search results. 
+        /// This ensures that events shown in the search are not duplicated in the recommendations. 
+        /// </summary>
+        private HashSet<Event> displayedEvents = new HashSet<Event>();
 
         /// <summary>
         /// Dark mode variable
@@ -97,10 +105,10 @@ namespace ST10203070_PROG7312_POE
                         cmb.DrawMode = DrawMode.OwnerDrawFixed;
                         cmb.DrawItem += ComboBox_DrawItem;
                     }
-                    else if (ctrl is ListBox lst)
+                    else if (ctrl is RichTextBox rtb)
                     {
-                        lst.BackColor = Color.FromArgb(30, 30, 30);
-                        lst.ForeColor = Color.White;
+                        rtb.BackColor = Color.FromArgb(30, 30, 30);
+                        rtb.ForeColor = Color.White;
                     }
                 }
             }
@@ -195,7 +203,9 @@ namespace ST10203070_PROG7312_POE
             DateTime fromDate = dtpFrom.Value;
             DateTime toDate = dtpTo.Value;
 
-            lstEvents.Items.Clear(); // Clear previous results
+            // Clear previous results and recommendations
+            rtbEvents.Clear();
+            displayedEvents.Clear(); // Clear the list of displayed events
 
             // Iterate over sorted dictionary, only within the given date range
             foreach (var date in eventsByDate.Keys)
@@ -207,22 +217,50 @@ namespace ST10203070_PROG7312_POE
                         if ((string.IsNullOrEmpty(searchTerm) || ev.Title.ToLower().Contains(searchTerm)) &&
                             (selectedCategory == "All" || ev.Category == selectedCategory))
                         {
-                            lstEvents.Items.Add($"{ev.Date.ToShortDateString()} - {ev.Title} ({ev.Category})");
+                            // Append event details and track it in displayedEvents
+                            AppendEventToRichTextBox(ev);
+                            displayedEvents.Add(ev); // Keep track of displayed events
                         }
                     }
                 }
             }
 
-            if (lstEvents.Items.Count == 0)
+            if (rtbEvents.Text == string.Empty)
             {
-                lstEvents.Items.Add("No events found.");
+                rtbEvents.AppendText("No events found.\n");
             }
 
             // Add the current search term to the search history for recommendations
             AddToSearchHistory(searchTerm);
 
-            // Append recommended events
+            // Show recommendations, excluding already displayed events
             ShowRecommendations();
+        }
+
+        /// <summary>
+        /// Appends the details of an event to the RichTextBox in a formatted manner.
+        /// The event's date is displayed in bold blue text, the title and category are in bold black text, 
+        /// and the description is italicized with a specific color. A separator is added after each event.
+        /// </summary>
+        /// <param name="ev"></param>
+        private void AppendEventToRichTextBox(Event ev)
+        {
+            rtbEvents.SelectionFont = new Font("Courier New", 12F, FontStyle.Bold);
+            rtbEvents.SelectionColor = Color.Blue;
+            rtbEvents.AppendText($"{ev.Date.ToShortDateString()}\n");
+
+            rtbEvents.SelectionFont = new Font("Courier New", 10F, FontStyle.Bold);
+            rtbEvents.SelectionColor = isDarkMode ? Color.White : Color.Black; // White for dark mode, black for light mode
+            rtbEvents.AppendText($"{ev.Title} ({ev.Category})\n");
+
+            // Adjust description and line color based on theme
+            rtbEvents.SelectionFont = new Font("Courier New", 10F, FontStyle.Italic);
+            rtbEvents.SelectionColor = isDarkMode ? Color.White : Color.Gray; // White for dark mode, gray for light mode
+            rtbEvents.AppendText($"{ev.Description}\n");
+
+            rtbEvents.SelectionFont = new Font("Courier New", 10F, FontStyle.Regular);
+            rtbEvents.SelectionColor = isDarkMode ? Color.White : Color.Black; // White for dark mode, black for light mode
+            rtbEvents.AppendText("-------------------------------\n");
         }
 
         /// <summary>
@@ -254,7 +292,8 @@ namespace ST10203070_PROG7312_POE
                 {
                     foreach (var ev in eventsQueue)
                     {
-                        if (ev.Title.ToLower().Contains(term))
+                        // Only recommend events that haven't been displayed yet
+                        if (ev.Title.ToLower().Contains(term) && !displayedEvents.Contains(ev))
                         {
                             recommendationSet.Add(ev);  // HashSet ensures unique events
                         }
@@ -271,20 +310,20 @@ namespace ST10203070_PROG7312_POE
         {
             var recommendations = RecommendEvents();
 
-            // Only display if we have recommendations
             if (recommendations.Count > 0)
             {
-                lstEvents.Items.Add(""); // Add some space
-                lstEvents.Items.Add("---- Recommended Events ----");
+                rtbEvents.AppendText("\n---- Recommended Events ----\n");
+                rtbEvents.SelectionFont = new Font("Courier New", 12F, FontStyle.Bold);
+                rtbEvents.SelectionColor = Color.DarkGreen;
 
                 foreach (var ev in recommendations)
                 {
-                    lstEvents.Items.Add($"{ev.Date.ToShortDateString()} - {ev.Title} ({ev.Category})");
+                    AppendEventToRichTextBox(ev);
                 }
             }
             else
             {
-                lstEvents.Items.Add("No recommendations found.");
+                rtbEvents.AppendText("\nNo recommendations found.\n");
             }
         }
 
@@ -341,16 +380,37 @@ namespace ST10203070_PROG7312_POE
         }
 
         /// <summary>
-        /// Event class to hold the information for each event
+        /// Represents a local event with properties for the event's title, category, date, and description.
+        /// This class provides a structure to hold the information for each event in the system.
         /// </summary>
         private class Event
         {
+            /// <summary>
+            /// Gets or sets the title of the event.
+            /// </summary>
             public string Title { get; set; }
+
+            /// <summary>
+            /// Gets or sets the category of the event, such as "Sports", "Cultural", etc.
+            /// </summary>
             public string Category { get; set; }
+
+            /// <summary>
+            /// Gets or sets the date of the event.
+            /// </summary>
             public DateTime Date { get; set; }
+
+            /// <summary>
+            /// Gets or sets a brief description of the event.
+            /// </summary>
             public string Description { get; set; }
 
-            // Override Equals and GetHashCode to allow HashSet to detect duplicates
+            /// <summary>
+            /// Overrides the Equals method to define equality based on the event's title, category, and date.
+            /// This ensures that events are considered equal if they have the same title, category, and date.
+            /// </summary>
+            /// <param name="obj">The object to compare with the current event.</param>
+            /// <returns>True if the provided object is equal to the current event; otherwise, false.</returns>
             public override bool Equals(object obj)
             {
                 if (obj is Event otherEvent)
@@ -360,6 +420,12 @@ namespace ST10203070_PROG7312_POE
                 return false;
             }
 
+            /// <summary>
+            /// Overrides the GetHashCode method to generate a unique hash code for the event.
+            /// The hash code is computed based on the event's title, category, and date to ensure 
+            /// that events with the same values are treated as duplicates in collections like HashSet.
+            /// </summary>
+            /// <returns>A hash code for the current event, based on the title, category, and date.</returns>
             public override int GetHashCode()
             {
                 return Title.GetHashCode() ^ Category.GetHashCode() ^ Date.GetHashCode();
