@@ -33,6 +33,15 @@ namespace ST10203070_PROG7312_POE
             // Keyboard shortcuts
             this.KeyPreview = true;
             this.KeyDown += MainMenuForm_KeyDown;
+
+            // Set the size of the form
+            this.Size = new Size(1162, 700);
+
+            // Set the minimum size of the form
+            this.MinimumSize = new Size(800, 600);
+
+            // Opening form in the center of the screen
+            this.StartPosition = FormStartPosition.CenterScreen;
         }
 
         /// <summary>

@@ -34,28 +34,37 @@ namespace ST10203070_PROG7312_POE
         /// <param name="soundEnabled"></param>
         public ReportIssuesForm(bool isDarkMode, bool soundEnabled)
         {
-                // Set sound and theme states
-                this.isSoundOn = soundEnabled;
-                this.isDarkMode = isDarkMode;
+            // Set sound and theme states
+            this.isSoundOn = soundEnabled;
+            this.isDarkMode = isDarkMode;
 
-                // Initialize the components
-                InitializeComponent();
+            // Initialize the components
+            InitializeComponent();
 
-                // Attach the Paint event to each button to apply the custom theme
-                btnAttachMedia.Paint += new PaintEventHandler(CustomButton_Paint);
-                btnSubmit.Paint += new PaintEventHandler(CustomButton_Paint);
-                btnBackToMainMenu.Paint += new PaintEventHandler(CustomButton_Paint);
+            // Set the size of the form
+            this.Size = new Size(800, 600);
 
-                // Apply theme settings based on the mode
-                ApplyTheme(isDarkMode);
+            // Set the minimum size of the form
+            this.MinimumSize = new Size(800, 550);
 
-                // Event handlers to update progress when the user interacts with the form
-                txtLocation.TextChanged += InputFieldChanged;
-                cmbCategory.SelectedIndexChanged += InputFieldChanged;
-                rtbDescription.TextChanged += InputFieldChanged;
+            // Opening form in the center of the screen
+            this.StartPosition = FormStartPosition.CenterScreen;
 
-                // Initialize progress bar and message
-                UpdateProgressBar();
+            // Attach the Paint event to each button to apply the custom theme
+            btnAttachMedia.Paint += new PaintEventHandler(CustomButton_Paint);
+            btnSubmit.Paint += new PaintEventHandler(CustomButton_Paint);
+            btnBackToMainMenu.Paint += new PaintEventHandler(CustomButton_Paint);
+
+            // Apply theme settings based on the mode
+            ApplyTheme(isDarkMode);
+
+            // Event handlers to update progress when the user interacts with the form
+            txtLocation.TextChanged += InputFieldChanged;
+            cmbCategory.SelectedIndexChanged += InputFieldChanged;
+            rtbDescription.TextChanged += InputFieldChanged;
+
+            // Initialize progress bar and message
+            UpdateProgressBar();
         }
 
         /// <summary>

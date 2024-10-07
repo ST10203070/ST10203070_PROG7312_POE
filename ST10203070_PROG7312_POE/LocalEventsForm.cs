@@ -59,6 +59,15 @@ namespace ST10203070_PROG7312_POE
             this.isDarkMode = isDarkMode;
             this.isSoundOn = isSoundOn;
 
+            // Set the size of the form
+            this.Size = new Size(800, 600);
+
+            // Set the minimum size of the form
+            this.MinimumSize = new Size(800, 550);
+
+            // Opening form in the center of the screen
+            this.StartPosition = FormStartPosition.CenterScreen;
+
             // Apply the selected theme (dark or light mode)
             ApplyTheme(isDarkMode);
 

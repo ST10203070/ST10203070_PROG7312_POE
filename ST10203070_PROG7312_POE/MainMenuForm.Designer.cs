@@ -112,7 +112,7 @@ namespace ST10203070_PROG7312_POE
             this.btnLocalEvents.Size = new System.Drawing.Size(200, 50);
             this.btnLocalEvents.TabIndex = 3;
             this.btnLocalEvents.Text = "Local Events and Announcements";
-            this.toolTip.SetToolTip(this.btnLocalEvents, "This feature is not yet implemented.");
+            this.toolTip.SetToolTip(this.btnLocalEvents, "Click to search for local events and announcements.");
             this.btnLocalEvents.UseVisualStyleBackColor = true;
             this.btnLocalEvents.Click += new System.EventHandler(this.btnLocalEvents_Click);
             // 
