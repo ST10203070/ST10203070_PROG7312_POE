@@ -16,7 +16,7 @@ namespace ST10203070_PROG7312_POE
         /// <summary>
         /// List to store reported issues
         /// </summary>
-        private List<ReportedIssue> reportedIssues = new List<ReportedIssue>();
+        public static List<ServiceRequest> reportedIssues = new List<ServiceRequest>();
         /// <summary>
         /// List to store attached media files
         /// </summary>
@@ -252,11 +252,11 @@ namespace ST10203070_PROG7312_POE
                 progressBar.Visible = true;
                 lblEngagement.Text = "Reporting your issue, please wait...";
                 // Simulated delay
-                await Task.Delay(2000); 
+                await Task.Delay(2000);
 
-                // Create and add new reported issue
-                ReportedIssue newIssue = new ReportedIssue(location, category, description, attachedMediaFiles);
-                reportedIssues.Add(newIssue);
+                // Create and add new reported issue (using ServiceRequest class)
+                ServiceRequest newIssue = new ServiceRequest(reportedIssues.Count + 1, description, "Pending", DateTime.Now);
+                reportedIssues.Add(newIssue); // Store issue globally
 
                 MessageBox.Show("Issue reported successfully!", "Submission Confirmation");
                 lblEngagement.Text = "Thank you for reporting!";

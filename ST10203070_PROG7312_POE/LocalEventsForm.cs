@@ -161,8 +161,8 @@ namespace ST10203070_PROG7312_POE
         {
             eventsByDate = new SortedDictionary<DateTime, Queue<Event>>();
 
-            AddEventToQueue(new Event { Title = "Community Clean-up", Category = "Cultural", Date = new DateTime(2024, 10, 10), Description = "Join us to clean up the park and neighborhood." });
-            AddEventToQueue(new Event { Title = "Football Tournament", Category = "Sports", Date = new DateTime(2024, 11, 05), Description = "Annual community football tournament." });
+            AddEventToQueue(new Event { Title = "Community Clean-up", Category = "Cultural", Date = new DateTime(2024, 12, 10), Description = "Join us to clean up the park and neighborhood." });
+            AddEventToQueue(new Event { Title = "Football Tournament", Category = "Sports", Date = new DateTime(2024, 11, 25), Description = "Annual community football tournament." });
             AddEventToQueue(new Event { Title = "Town Hall Meeting", Category = "Public Meetings", Date = new DateTime(2024, 12, 01), Description = "Discussing public safety and municipal services." });
             AddEventToQueue(new Event { Title = "Music Festival", Category = "Cultural", Date = new DateTime(2024, 12, 10), Description = "A celebration of local talent with music and food." });
 

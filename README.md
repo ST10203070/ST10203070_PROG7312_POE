@@ -10,7 +10,7 @@ Key Features:
 	Receive personalised event recommendations based on search history.
 3. Service Request Status:
 	View and track the progress of service requests.
-	Requests are prioritised and organised using efficient data structures (AVL Trees, Min-Heap, Graph, and Minimum Spanning Tree).
+	Requests are prioritised and organised using efficient data structures (AVL Trees, Red-Black Trees, Min-Heap, Graph, and Minimum Spanning Tree).
 
 
 Getting Started:
@@ -59,7 +59,7 @@ Using the Application:
 
 	Service Request Status Page:
 	Displays a list of all submitted service requests, including details such as the request ID, description, submission date, and current status.
-	The service requests are managed using AVL Trees, Min-Heaps, and Graphs to ensure efficient data handling and prioritisation.
+	The service requests are managed using AVL Trees, Red-Black Trees, Min-Heaps, and Graphs to ensure efficient data handling and prioritisation.
 
 	Additional Features:
 	Dark Mode: Toggle dark mode on or off using the checkbox.
@@ -85,7 +85,17 @@ Contribution:
 Example:
 	When a new service request is submitted (e.g., a road repair request), it is inserted into the AVL tree based on its request ID. The tree performs automatic balancing to ensure the height of the tree remains optimal, providing fast future lookups.
 
-2. Min-Heap (Priority Queue)
+2. Red-Black Tree (Self-Balancing Binary Search Tree):
+Role:
+	The Red-Black Tree is another balanced tree used to store service requests. Like the AVL Tree, it guarantees that the tree remains balanced, but its balancing operations are more lenient, making insertions and deletions more efficient in some cases.
+
+Contribution:
+	The Red-Black Tree provides O(log n) time complexity for insertion, deletion, and search operations. Compared to the AVL Tree, Red-Black Trees may allow for faster insertions due to fewer rotations, at the cost of being slightly less balanced than an AVL Tree.
+
+Example:
+	When multiple service requests are submitted in a short time, such as several road repair and sanitation requests, the Red-Black Tree's faster insertion times can help manage these requests efficiently while ensuring balance in the tree.
+
+3. Min-Heap (Priority Queue)
 Role: 
 	The Min-Heap is used to prioritise service requests based on submission dates, ensuring that the oldest requests are addressed first.
 
@@ -95,7 +105,7 @@ Contribution:
 Example:
 	A service request submitted in January is processed before one submitted in March, as the Min-Heap ensures that the oldest request remains at the root of the heap for quick extraction.
 
-3. Graph and Graph Traversal (Breadth-First Search)
+4. Graph and Graph Traversal (Breadth-First Search)
 Role: 
 	The Graph is used to represent dependencies between service requests. For example, if one request depends on the completion of another, this relationship is represented in the graph.
 
@@ -105,7 +115,7 @@ Contribution:
 Example:
 	If a water leakage repair depends on a road being fixed first, the graph ensures that the road repair is completed before addressing the water leakage.
 
-4. Prim's Algorithm (Minimum Spanning Tree)
+5. Prim's Algorithm (Minimum Spanning Tree)
 Role: 
 	Prim's Algorithm is used to compute the Minimum Spanning Tree (MST) for the graph of service request dependencies. This ensures that the minimum number of dependencies are followed when processing requests, optimizing the overall workflow.
 

@@ -8,20 +8,37 @@ namespace ST10203070_PROG7312_POE
 {
     public partial class ServiceRequestStatusForm : Form
     {
-        // Variables to store dark mode and sound settings
+        /// <summary>
+        /// Variables to store dark mode and sound settings
+        /// </summary>        
         private bool isDarkMode;
         private bool isSoundOn;
 
-        // AVL Tree for storing service requests, indexed by unique request ID
-        private AVLTree<ServiceRequest> serviceRequestsTree;
+        /// <summary>
+        /// AVL Tree for storing service requests, indexed by unique request ID
+        /// </summary>
+        private AVLTree<ServiceRequest> serviceRequestsAVLTree;
 
-        // Min-Heap for prioritizing service requests based on submission date
+        /// <summary>
+        /// Red-Black Tree for storing service requests, indexed by unique request ID
+        /// </summary>
+        private RedBlackTree<ServiceRequest> serviceRequestsRedBlackTree;
+
+        /// <summary>
+        /// Min-Heap for prioritizing service requests based on submission date
+        /// </summary>
         private MinHeap<ServiceRequest> serviceRequestHeap;
 
-        // Graph for managing dependencies between service requests and Minimum Spanning Tree
+        /// <summary>
+        /// Graph for managing dependencies between service requests and Minimum Spanning Tree
+        /// </summary>        
         private Graph<ServiceRequest> serviceRequestGraph;
 
-        // Constructor with parameters for dark mode and sound settings
+        /// <summary>
+        /// Constructor with parameters for dark mode and sound settings
+        /// </summary>
+        /// <param name="isDarkMode"></param>
+        /// <param name="isSoundOn"></param>
         public ServiceRequestStatusForm(bool isDarkMode, bool isSoundOn)
         {
             InitializeComponent();
@@ -43,21 +60,25 @@ namespace ST10203070_PROG7312_POE
             btnBackToMainMenu.Paint += new PaintEventHandler(CustomButton_Paint);
 
             // Initialize the data structures
-            serviceRequestsTree = new AVLTree<ServiceRequest>();
+            serviceRequestsAVLTree = new AVLTree<ServiceRequest>();
+            serviceRequestsRedBlackTree = new RedBlackTree<ServiceRequest>();
             serviceRequestHeap = new MinHeap<ServiceRequest>();
             serviceRequestGraph = new Graph<ServiceRequest>();
 
             // Apply the selected theme (dark or light mode)
             ApplyTheme(isDarkMode);
 
-            // Load service requests into the tree (Sample Data)
-            LoadSampleServiceRequests();
+            // Load service requests from ReportIssuesForm (Shared Global List)
+            LoadServiceRequests();
 
             // Display the service requests in the ListView
             DisplayServiceRequests();
         }
 
-        // Method to apply dark mode or light mode based on the parameter
+        /// <summary>
+        /// Method to apply dark mode or light mode based on the parameter
+        /// </summary>
+        /// <param name="isDarkMode"></param>
         private void ApplyTheme(bool isDarkMode)
         {
             if (isDarkMode)
@@ -78,34 +99,39 @@ namespace ST10203070_PROG7312_POE
             }
         }
 
-        // Load sample service requests into the AVL tree and heap
-        private void LoadSampleServiceRequests()
+        /// <summary>
+        /// Load service requests from the global reportedIssues list (filled in ReportIssuesForm)
+        /// </summary>
+        private void LoadServiceRequests()
         {
-            var request1 = new ServiceRequest(1001, "Road Pothole Repair", "Pending", new DateTime(2024, 1, 10));
-            var request2 = new ServiceRequest(1002, "Water Leakage", "In Progress", new DateTime(2024, 2, 5));
-            var request3 = new ServiceRequest(1003, "Streetlight Repair", "Completed", new DateTime(2024, 3, 12));
+            foreach (var request in ReportIssuesForm.reportedIssues)
+            {
+                // Insert into AVL Tree
+                serviceRequestsAVLTree.Insert(request);
 
-            serviceRequestsTree.Insert(request1);
-            serviceRequestsTree.Insert(request2);
-            serviceRequestsTree.Insert(request3);
+                // Insert into Red-Black Tree
+                serviceRequestsRedBlackTree.Insert(request);
 
-            serviceRequestHeap.Insert(request1);
-            serviceRequestHeap.Insert(request2);
-            serviceRequestHeap.Insert(request3);
+                // Insert into Min-Heap for prioritization
+                serviceRequestHeap.Insert(request);
 
-            // Add dependencies between requests to the graph
-            serviceRequestGraph.AddNode(request1);
-            serviceRequestGraph.AddNode(request2);
-            serviceRequestGraph.AddNode(request3);
-
-            serviceRequestGraph.AddEdge(request1, request2);  // Example: request1 must be completed before request2
+                // Add nodes to graph
+                serviceRequestGraph.AddNode(request);
+            }
         }
 
-        // Display service requests in the ListView using in-order traversal of the AVL tree
+        /// <summary>
+        /// Function to display service requests from the AVL tree only to avoid duplicates from Red-Black tree
+        /// </summary>
         private void DisplayServiceRequests()
         {
             lstServiceRequests.Items.Clear(); // Clear previous entries
-            foreach (var request in serviceRequestsTree.InOrderTraversal())
+
+            // Retrieve service requests from AVL tree 
+            List<ServiceRequest> avlRequests = serviceRequestsAVLTree.InOrderTraversal();  // Retrieve from AVL Tree
+
+            // Populate the ListView with AVL service requests 
+            foreach (var request in avlRequests)
             {
                 ListViewItem item = new ListViewItem(request.RequestId.ToString());
                 item.SubItems.Add(request.Description);
@@ -115,7 +141,11 @@ namespace ST10203070_PROG7312_POE
             }
         }
 
-        // Event handler for Back to Main Menu button click
+        /// <summary>
+        /// Event handler for Back to Main Menu button click
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void btnBackToMainMenu_Click(object sender, EventArgs e)
         {
             this.Close(); // Close the ServiceRequestStatusForm and return to the main menu
@@ -160,7 +190,9 @@ namespace ST10203070_PROG7312_POE
         }
     }
 
-    // ServiceRequest class to represent individual service requests
+    /// <summary>
+    /// ServiceRequest class to represent individual service requests
+    /// </summary>
     public class ServiceRequest : IComparable<ServiceRequest>
     {
         public int RequestId { get; set; }
@@ -183,7 +215,10 @@ namespace ST10203070_PROG7312_POE
         }
     }
 
-    // AVLTree class for balancing service request inserts
+    /// <summary>
+    /// AVLTree class for balancing service request inserts
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
     public class AVLTree<T> where T : IComparable<T>
     {
         private TreeNode<T> root;
@@ -283,7 +318,10 @@ namespace ST10203070_PROG7312_POE
         }
     }
 
-    // TreeNode class to represent each node in the AVL tree
+    /// <summary>
+    /// TreeNode class to represent each node in the AVL tree
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
     public class TreeNode<T>
     {
         public T Value { get; set; }
@@ -298,7 +336,10 @@ namespace ST10203070_PROG7312_POE
         }
     }
 
-    // MinHeap class for priority queue
+    /// <summary>
+    /// MinHeap class for priority queue
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
     public class MinHeap<T> where T : IComparable<T>
     {
         private List<T> heap = new List<T>();
@@ -384,7 +425,10 @@ namespace ST10203070_PROG7312_POE
         }
     }
 
-    // Graph class for service request dependencies and Minimum Spanning Tree (MST)
+    /// <summary>
+    /// Graph class for service request dependencies and Minimum Spanning Tree (MST)
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
     public class Graph<T>
     {
         private Dictionary<T, List<T>> adjacencyList = new Dictionary<T, List<T>>();
@@ -470,7 +514,10 @@ namespace ST10203070_PROG7312_POE
         }
     }
 
-    // Simple priority queue class for Prim's MST algorithm
+    /// <summary>
+    /// Simple priority queue class for Prim's MST algorithm
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
     public class PriorityQueue<T>
     {
         private List<T> elements = new List<T>();
@@ -489,4 +536,180 @@ namespace ST10203070_PROG7312_POE
             return item;
         }
     }
+
+    /// <summary>
+    /// Red black tree class
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
+    public class RedBlackTree<T> where T : IComparable<T>
+    {
+        private enum NodeColor { Red, Black } // Enum to represent node colors
+
+        // Inner node class
+        private class RedBlackNode
+        {
+            public T Value;
+            public RedBlackNode Left, Right, Parent;
+            public NodeColor Color; // Color of the node
+
+            // Node constructor
+            public RedBlackNode(T value)
+            {
+                Value = value;
+                Left = Right = Parent = null;
+                Color = NodeColor.Red; // New nodes start as red
+            }
+        }
+
+        private RedBlackNode root;
+
+        // Tree constructor
+        public RedBlackTree()
+        {
+            root = null;
+        }
+
+        // Insert a new value into the Red-Black Tree
+        public void Insert(T value)
+        {
+            RedBlackNode newNode = new RedBlackNode(value);
+            if (root == null) // If the tree is empty
+            {
+                root = newNode;
+                root.Color = NodeColor.Black; // Root is always black
+            }
+            else
+            {
+                RedBlackNode parent = null, current = root;
+                while (current != null)
+                {
+                    parent = current;
+                    if (value.CompareTo(current.Value) < 0)
+                        current = current.Left;
+                    else
+                        current = current.Right;
+                }
+
+                newNode.Parent = parent;
+                if (value.CompareTo(parent.Value) < 0)
+                    parent.Left = newNode;
+                else
+                    parent.Right = newNode;
+
+                FixInsert(newNode); // Ensure tree properties are maintained
+            }
+        }
+
+        // Fix Red-Black Tree violations after an insertion
+        private void FixInsert(RedBlackNode node)
+        {
+            while (node != root && node.Parent.Color == NodeColor.Red)
+            {
+                RedBlackNode grandParent = node.Parent.Parent;
+                if (node.Parent == grandParent.Left) // Parent is a left child
+                {
+                    RedBlackNode uncle = grandParent.Right;
+                    if (uncle != null && uncle.Color == NodeColor.Red) // Case 1
+                    {
+                        node.Parent.Color = NodeColor.Black;
+                        uncle.Color = NodeColor.Black;
+                        grandParent.Color = NodeColor.Red;
+                        node = grandParent;
+                    }
+                    else
+                    {
+                        if (node == node.Parent.Right) // Case 2
+                        {
+                            node = node.Parent;
+                            RotateLeft(node);
+                        }
+                        node.Parent.Color = NodeColor.Black; // Case 3
+                        grandParent.Color = NodeColor.Red;
+                        RotateRight(grandParent);
+                    }
+                }
+                else // Parent is a right child (mirror case)
+                {
+                    RedBlackNode uncle = grandParent.Left;
+                    if (uncle != null && uncle.Color == NodeColor.Red)
+                    {
+                        node.Parent.Color = NodeColor.Black;
+                        uncle.Color = NodeColor.Black;
+                        grandParent.Color = NodeColor.Red;
+                        node = grandParent;
+                    }
+                    else
+                    {
+                        if (node == node.Parent.Left)
+                        {
+                            node = node.Parent;
+                            RotateRight(node);
+                        }
+                        node.Parent.Color = NodeColor.Black;
+                        grandParent.Color = NodeColor.Red;
+                        RotateLeft(grandParent);
+                    }
+                }
+            }
+            root.Color = NodeColor.Black; // Root is always black
+        }
+
+        // Rotate the node to the left
+        private void RotateLeft(RedBlackNode node)
+        {
+            RedBlackNode temp = node.Right;
+            node.Right = temp.Left;
+            if (temp.Left != null)
+                temp.Left.Parent = node;
+
+            temp.Parent = node.Parent;
+            if (node.Parent == null)
+                root = temp;
+            else if (node == node.Parent.Left)
+                node.Parent.Left = temp;
+            else
+                node.Parent.Right = temp;
+
+            temp.Left = node;
+            node.Parent = temp;
+        }
+
+        // Rotate the node to the right
+        private void RotateRight(RedBlackNode node)
+        {
+            RedBlackNode temp = node.Left;
+            node.Left = temp.Right;
+            if (temp.Right != null)
+                temp.Right.Parent = node;
+
+            temp.Parent = node.Parent;
+            if (node.Parent == null)
+                root = temp;
+            else if (node == node.Parent.Right)
+                node.Parent.Right = temp;
+            else
+                node.Parent.Left = temp;
+
+            temp.Right = node;
+            node.Parent = temp;
+        }
+
+        // In-order traversal to retrieve elements in sorted order
+        public List<T> InOrderTraversal()
+        {
+            List<T> result = new List<T>();
+            InOrderRecursive(root, result); // Helper method for recursion
+            return result;
+        }
+
+        private void InOrderRecursive(RedBlackNode node, List<T> result)
+        {
+            if (node == null) return;
+            InOrderRecursive(node.Left, result);
+            result.Add(node.Value);
+            InOrderRecursive(node.Right, result);
+        }
+    }
+
+
 }
