@@ -710,6 +710,4 @@ namespace ST10203070_PROG7312_POE
             InOrderRecursive(node.Right, result);
         }
     }
-
-
 }

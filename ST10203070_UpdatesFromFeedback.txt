@@ -4,4 +4,4 @@ PART 1 Feedback Updates:
 
 PART 2 Feedback Updates:
 
-- 
+- Updated the events form to prevent it from looking "bland" while maintaining a neat and coherent style.
