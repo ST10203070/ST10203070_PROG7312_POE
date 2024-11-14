@@ -68,9 +68,6 @@ namespace ST10203070_PROG7312_POE
             // Apply the selected theme (dark or light mode)
             ApplyTheme(isDarkMode);
 
-            // Load service requests from ReportIssuesForm (Shared Global List)
-            LoadServiceRequests();
-
             // Display the service requests in the ListView
             DisplayServiceRequests();
         }
@@ -100,38 +97,17 @@ namespace ST10203070_PROG7312_POE
         }
 
         /// <summary>
-        /// Load service requests from the global reportedIssues list (filled in ReportIssuesForm)
-        /// </summary>
-        private void LoadServiceRequests()
-        {
-            foreach (var request in ReportIssuesForm.reportedIssues)
-            {
-                // Insert into AVL Tree
-                serviceRequestsAVLTree.Insert(request);
-
-                // Insert into Red-Black Tree
-                serviceRequestsRedBlackTree.Insert(request);
-
-                // Insert into Min-Heap for prioritization
-                serviceRequestHeap.Insert(request);
-
-                // Add nodes to graph
-                serviceRequestGraph.AddNode(request);
-            }
-        }
-
-        /// <summary>
-        /// Function to display service requests from the AVL tree only to avoid duplicates from Red-Black tree
+        /// Function to display service requests from the AVL tree
         /// </summary>
         private void DisplayServiceRequests()
         {
             lstServiceRequests.Items.Clear(); // Clear previous entries
 
-            // Retrieve service requests from AVL tree 
-            List<ServiceRequest> avlRequests = serviceRequestsAVLTree.InOrderTraversal();  // Retrieve from AVL Tree
+            // Retrieve service requests from the AVL tree in ReportIssuesForm
+            var serviceRequests = ReportIssuesForm.reportedIssuesTree.InOrderTraversal();
 
-            // Populate the ListView with AVL service requests 
-            foreach (var request in avlRequests)
+            // Populate the ListView with the retrieved service requests
+            foreach (var request in serviceRequests)
             {
                 ListViewItem item = new ListViewItem(request.RequestId.ToString());
                 item.SubItems.Add(request.Description);
@@ -222,11 +198,16 @@ namespace ST10203070_PROG7312_POE
     public class AVLTree<T> where T : IComparable<T>
     {
         private TreeNode<T> root;
+        private int count; // Keep track of the number of nodes
+
+        // Property to get the count of nodes
+        public int Count => count;
 
         // Insert a new service request into the AVL tree
         public void Insert(T value)
         {
             root = InsertRecursive(root, value);
+            count++; // Increment the count when a new node is added
         }
 
         // Recursive insertion with balancing

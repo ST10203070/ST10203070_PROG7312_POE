@@ -14,9 +14,9 @@ namespace ST10203070_PROG7312_POE
     public partial class ReportIssuesForm : Form
     {
         /// <summary>
-        /// List to store reported issues
+        /// Tree structure (AVL Tree) to store reported issues
         /// </summary>
-        public static List<ServiceRequest> reportedIssues = new List<ServiceRequest>();
+        public static AVLTree<ServiceRequest> reportedIssuesTree = new AVLTree<ServiceRequest>();
         /// <summary>
         /// List to store attached media files
         /// </summary>
@@ -255,8 +255,8 @@ namespace ST10203070_PROG7312_POE
                 await Task.Delay(2000);
 
                 // Create and add new reported issue (using ServiceRequest class)
-                ServiceRequest newIssue = new ServiceRequest(reportedIssues.Count + 1, description, "Pending", DateTime.Now);
-                reportedIssues.Add(newIssue); // Store issue globally
+                ServiceRequest newIssue = new ServiceRequest(reportedIssuesTree.Count + 1, description, "Pending", DateTime.Now);
+                reportedIssuesTree.Insert(newIssue); // Store issue globally
 
                 MessageBox.Show("Issue reported successfully!", "Submission Confirmation");
                 lblEngagement.Text = "Thank you for reporting!";

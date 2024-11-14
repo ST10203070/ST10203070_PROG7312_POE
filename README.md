@@ -13,6 +13,25 @@ Key Features:
 	Requests are prioritised and organised using efficient data structures (AVL Trees, Red-Black Trees, Min-Heap, Graph, and Minimum Spanning Tree).
 
 
+Cloning Repository from GitHub:
+1. Install Git:
+	Ensure you have Git installed on your machine. 
+2. Access the Repository:
+	Go to the GitHub repository for this project: 	https://github.com/ST10203070/ST10203070_PROG7312_POE
+3. Clone the Repository:
+	Open a terminal or command prompt and run the following command:
+	git clone https://github.com/ST10203070/ST10203070_PROG7312_POE.git
+	This command will download all the project files to your local machine in a folder named ST10203070_PROG7312_POE.
+4. Navigate to the Project Directory:
+	After cloning, navigate to the project folder using the command:
+	cd ST10203070_PROG7312_POE
+5. Open the Project in Visual Studio
+	Locate the .sln file in the cloned repository.
+	Double click the .sln file to open the project in Visual Studio.
+6. Build and Run the Application
+	Follow the steps under the "Build the Solution" section in this README to build and execute the application. 
+	
+
 Getting Started:
 Follow these instructions to compile, run, and use the application.
 
@@ -80,7 +99,7 @@ Role:
 	The AVL Tree is used to store and manage service requests by unique request IDs. It ensures that the tree remains balanced after every insertion, improving efficiency in searching, inserting, and deleting service requests.
 
 Contribution:
-	Maintains a logarithmic time complexity (O(log n)) for insertions, deletions, and lookups by keeping the tree balanced. This ensures quick access to service requests, even as the number of requests grows.
+	Maintains a logarithmic time complexity for insertions, deletions, and lookups by keeping the tree balanced. This ensures quick access to service requests, even as the number of requests grows.
 
 Example:
 	When a new service request is submitted (e.g., a road repair request), it is inserted into the AVL tree based on its request ID. The tree performs automatic balancing to ensure the height of the tree remains optimal, providing fast future lookups.
@@ -90,7 +109,7 @@ Role:
 	The Red-Black Tree is another balanced tree used to store service requests. Like the AVL Tree, it guarantees that the tree remains balanced, but its balancing operations are more lenient, making insertions and deletions more efficient in some cases.
 
 Contribution:
-	The Red-Black Tree provides O(log n) time complexity for insertion, deletion, and search operations. Compared to the AVL Tree, Red-Black Trees may allow for faster insertions due to fewer rotations, at the cost of being slightly less balanced than an AVL Tree.
+	The Red-Black Tree provides time complexity for insertion, deletion, and search operations. Compared to the AVL Tree, Red-Black Trees may allow for faster insertions due to fewer rotations, at the cost of being slightly less balanced than an AVL Tree.
 
 Example:
 	When multiple service requests are submitted in a short time, such as several road repair and sanitation requests, the Red-Black Tree's faster insertion times can help manage these requests efficiently while ensuring balance in the tree.
@@ -100,7 +119,7 @@ Role:
 	The Min-Heap is used to prioritise service requests based on submission dates, ensuring that the oldest requests are addressed first.
 
 Contribution:
-	The Min-Heap allows for efficient extraction of the service request with the earliest submission date in O(log n) time, ensuring that the system prioritises older requests.
+	The Min-Heap allows for efficient extraction of the service request with the earliest submission date in time, ensuring that the system prioritises older requests.
 
 Example:
 	A service request submitted in January is processed before one submitted in March, as the Min-Heap ensures that the oldest request remains at the root of the heap for quick extraction.
